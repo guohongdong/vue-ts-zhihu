@@ -1,17 +1,29 @@
 <template>
   <div class="container">
     <Header :user="userInfo"></Header>
+    <ValidateInput :rules="rules"></ValidateInput>
     <ColumnList :list="list"></ColumnList>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
+import ValidateInput, { RuleProp } from './components/ValidateInput.vue'
 import Header, { UserProps } from './components/Header.vue'
 import './assets/style/reset.css'
 import './assets/style/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+const rules: RuleProp[] = [
+  {
+    type: 'requried',
+    message: '请输入邮箱'
+  },
+  {
+    type: 'email',
+    message: '邮箱地址错误'
+  }
+]
 const tableList: ColumnProps[] = [
   {
     id: 1,
@@ -52,16 +64,40 @@ const userInfo: UserProps = {
   nickName: 'hongdong'
 }
 
+const pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+
 export default defineComponent({
   name: 'App',
   components: {
     ColumnList,
-    Header
+    Header,
+    ValidateInput
   },
   setup () {
+    const emailRef = reactive({
+      val: '',
+      error: false,
+      message: ''
+    })
+    const validateEmail = () => {
+      console.log(emailRef.val)
+      if (!emailRef.val.trim()) {
+        emailRef.error = true
+        emailRef.message = '输入不能为空'
+      } else if (!pattern.test(emailRef.val)) {
+        emailRef.error = true
+        emailRef.message = '邮箱格式有误'
+      } else {
+        emailRef.error = false
+        emailRef.message = ''
+      }
+    }
     return {
       list: tableList,
-      userInfo
+      userInfo,
+      emailRef,
+      validateEmail,
+      rules
     }
   }
 })
