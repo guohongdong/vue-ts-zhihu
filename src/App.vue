@@ -1,13 +1,14 @@
 <template>
   <div class="container">
     <Header :user="userInfo"></Header>
-    <ValidateInput :rules="rules"></ValidateInput>
+    <ValidateInput placeholder="请输入邮箱" type="text" :rules="rules" v-model="inputVal"></ValidateInput>
+    <div>{{inputVal}}</div>
     <ColumnList :list="list"></ColumnList>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import ValidateInput, { RuleProp } from './components/ValidateInput.vue'
 import Header, { UserProps } from './components/Header.vue'
@@ -74,6 +75,7 @@ export default defineComponent({
     ValidateInput
   },
   setup () {
+    const inputVal = ref('')
     const emailRef = reactive({
       val: '',
       error: false,
@@ -97,7 +99,8 @@ export default defineComponent({
       userInfo,
       emailRef,
       validateEmail,
-      rules
+      rules,
+      inputVal
     }
   }
 })
