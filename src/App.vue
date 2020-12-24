@@ -1,21 +1,32 @@
 <template>
   <div class="container">
     <Header :user="userInfo"></Header>
-    <ValidateForm @form-submit = "handleFormSubmit">
-      <ValidateInput
-        placeholder="请输入邮箱"
-        type="text"
-        :rules="rules"
-        v-model="inputVal"
-      ></ValidateInput>
+    <ValidateForm @form-submit="handleFormSubmit">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
+        <ValidateInput
+          placeholder="请输入邮箱"
+          type="text"
+          :rules="emailRules"
+          v-model="emailVal"
+        ></ValidateInput>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">密码</label>
+        <ValidateInput
+          placeholder="请输入密码"
+          type="password"
+          :rules="passwordRules"
+          v-model="passwordVal"
+        ></ValidateInput>
+      </div>
     </ValidateForm>
-    <div>{{ inputVal }}</div>
     <ColumnList :list="list"></ColumnList>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import ValidateForm from './components/ValidateForm.vue'
 import ValidateInput, { RuleProp } from './components/ValidateInput.vue'
@@ -23,16 +34,6 @@ import Header, { UserProps } from './components/Header.vue'
 import './assets/style/reset.css'
 import './assets/style/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-const rules: RuleProp[] = [
-  {
-    type: 'requried',
-    message: '请输入邮箱'
-  },
-  {
-    type: 'email',
-    message: '邮箱地址错误'
-  }
-]
 const tableList: ColumnProps[] = [
   {
     id: 1,
@@ -73,8 +74,6 @@ const userInfo: UserProps = {
   nickName: 'hongdong'
 }
 
-const pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-
 export default defineComponent({
   name: 'App',
   components: {
@@ -84,35 +83,34 @@ export default defineComponent({
     ValidateForm
   },
   setup () {
-    const inputVal = ref('')
-    const emailRef = reactive({
-      val: '',
-      error: false,
-      message: ''
-    })
-    const validateEmail = () => {
-      console.log(emailRef.val)
-      if (!emailRef.val.trim()) {
-        emailRef.error = true
-        emailRef.message = '输入不能为空'
-      } else if (!pattern.test(emailRef.val)) {
-        emailRef.error = true
-        emailRef.message = '邮箱格式有误'
-      } else {
-        emailRef.error = false
-        emailRef.message = ''
+    const emailVal = ref('')
+    const emailRules: RuleProp[] = [
+      {
+        type: 'requried',
+        message: '请输入邮箱'
+      },
+      {
+        type: 'email',
+        message: '邮箱地址错误'
       }
-    }
+    ]
+    const passwordVal = ref('')
+    const passwordRules: RuleProp[] = [
+      {
+        type: 'requried',
+        message: '请输入密码'
+      }
+    ]
     const handleFormSubmit = (e: boolean) => {
       console.log(e)
     }
     return {
       list: tableList,
       userInfo,
-      emailRef,
-      validateEmail,
-      rules,
-      inputVal,
+      emailRules,
+      emailVal,
+      passwordVal,
+      passwordRules,
       handleFormSubmit
     }
   }
