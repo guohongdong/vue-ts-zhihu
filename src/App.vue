@@ -1,8 +1,15 @@
 <template>
   <div class="container">
     <Header :user="userInfo"></Header>
-    <ValidateInput placeholder="请输入邮箱" type="text" :rules="rules" v-model="inputVal"></ValidateInput>
-    <div>{{inputVal}}</div>
+    <ValidateForm @form-submit = "handleFormSubmit">
+      <ValidateInput
+        placeholder="请输入邮箱"
+        type="text"
+        :rules="rules"
+        v-model="inputVal"
+      ></ValidateInput>
+    </ValidateForm>
+    <div>{{ inputVal }}</div>
     <ColumnList :list="list"></ColumnList>
   </div>
 </template>
@@ -10,6 +17,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
+import ValidateForm from './components/ValidateForm.vue'
 import ValidateInput, { RuleProp } from './components/ValidateInput.vue'
 import Header, { UserProps } from './components/Header.vue'
 import './assets/style/reset.css'
@@ -72,7 +80,8 @@ export default defineComponent({
   components: {
     ColumnList,
     Header,
-    ValidateInput
+    ValidateInput,
+    ValidateForm
   },
   setup () {
     const inputVal = ref('')
@@ -94,13 +103,17 @@ export default defineComponent({
         emailRef.message = ''
       }
     }
+    const handleFormSubmit = (e: boolean) => {
+      console.log(e)
+    }
     return {
       list: tableList,
       userInfo,
       emailRef,
       validateEmail,
       rules,
-      inputVal
+      inputVal,
+      handleFormSubmit
     }
   }
 })
