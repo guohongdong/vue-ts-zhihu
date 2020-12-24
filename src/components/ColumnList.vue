@@ -4,9 +4,13 @@
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
           <img :src="item.avatar" class="card-img-top" :alt="item.title" />
-          <h5 class="card-title">{{ item.title }}</h5>
+          <h5 class="card-title text-truncate">{{ item.title }}</h5>
           <p class="card-text">{{ item.description }}</p>
-          <a href="#" class="btn btn-outline-primary">进入专栏</a>
+          <router-link
+            :to="`/column/${item.id}`"
+            class="btn btn-outline-primary"
+            >进入专栏</router-link
+          >
         </div>
       </div>
     </li>
