@@ -28,6 +28,7 @@ import { defineComponent, ref } from 'vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import ValidateInput, { RuleProp } from '../components/ValidateInput.vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 export default defineComponent({
   components: {
     ValidateForm,
@@ -53,9 +54,11 @@ export default defineComponent({
         message: '请输入密码'
       }
     ]
+    const store = useStore()
     const handleFormSubmit = (flag: boolean) => {
       console.log(flag)
       if (flag) {
+        store.commit('login')
         router.push('/')
       }
     }

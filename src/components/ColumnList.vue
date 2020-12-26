@@ -3,9 +3,9 @@
     <li v-for="item in list" :key="item" class="col-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
-          <img :src="item.avatar" class="card-img-top" :alt="item.title" />
+          <img :src="item.avatar" class="card-img-top mb-4" :alt="item.title" />
           <h5 class="card-title text-truncate">{{ item.title }}</h5>
-          <p class="card-text">{{ item.description }}</p>
+          <p class="card-text mb-4">{{ item.description }}</p>
           <router-link
             :to="`/column/${item.id}`"
             class="btn btn-outline-primary"

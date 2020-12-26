@@ -1,24 +1,21 @@
 <template>
   <div class="container">
-    <Header :user="userInfo"></Header>
+    <Header :user="user"></Header>
     <router-view></router-view>
     <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Header, { UserProps } from './components/Header.vue'
+import { defineComponent, computed } from 'vue'
+import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+import { useStore } from 'vuex'
+import { StoreDataProps } from './store/index'
 
 import './assets/style/reset.css'
 import './assets/style/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
-const userInfo: UserProps = {
-  isLogin: false,
-  nickName: 'hongdong'
-}
 
 export default defineComponent({
   name: 'App',
@@ -27,12 +24,10 @@ export default defineComponent({
     Footer
   },
   setup () {
-    const handleFormSubmit = (e: boolean) => {
-      console.log(e)
-    }
+    const store = useStore<StoreDataProps>()
+    const user = computed(() => store.state.user)
     return {
-      userInfo,
-      handleFormSubmit
+      user
     }
   }
 })
