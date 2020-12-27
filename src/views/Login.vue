@@ -58,7 +58,7 @@ export default defineComponent({
     const handleFormSubmit = (flag: boolean) => {
       console.log(flag)
       if (flag) {
-        store.commit('login')
+        store.dispatch('loginAndFetch')
         router.push('/')
       }
     }

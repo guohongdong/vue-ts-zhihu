@@ -5,7 +5,7 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import ColumnDetail from './views/ColumnDetail.vue'
 import store from './store/index'
-
+import './mock/index.ts'
 const routerHistory = createWebHistory()
 const router = createRouter({
   history: routerHistory,
