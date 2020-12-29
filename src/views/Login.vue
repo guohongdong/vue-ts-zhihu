@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import ValidateForm from '../components/ValidateForm.vue'
-import ValidateInput, { RuleProp } from '../components/ValidateInput.vue'
+import ValidateInput, { RuleProps } from '../components/ValidateInput.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default defineComponent({
@@ -37,7 +37,7 @@ export default defineComponent({
   setup () {
     const router = useRouter()
     const emailVal = ref('')
-    const emailRules: RuleProp[] = [
+    const emailRules: RuleProps[] = [
       {
         type: 'requried',
         message: '请输入邮箱'
@@ -48,7 +48,7 @@ export default defineComponent({
       }
     ]
     const passwordVal = ref('')
-    const passwordRules: RuleProp[] = [
+    const passwordRules: RuleProps[] = [
       {
         type: 'requried',
         message: '请输入密码'

@@ -1,13 +1,21 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input
-      class="form-control"
-      :class="{ 'is-invalid': inputRef.error }"
-      :value="inputRef.val"
-      @blur="validateInput"
-      @input="updateValue"
-      :="$attrs"
-    />
+    <textarea
+    v-if="type==='textarea'"
+    class="form-control"
+    :class="{
+    'is-invalid': inputRef.error }"
+    :="$attrs"
+    v-model="inputRef.val"
+    @blur="validateInput"
+     />
+     <input v-else
+     class="form-control"
+     :class="{ 'is-invalid': inputRef.error }"
+     :="$attrs"
+     v-model="inputRef.val"
+     @blur="validateInput"
+     />
     <span v-if="inputRef.error" class="invalid-feedback">
       {{ inputRef.message }}
     </span>
@@ -15,35 +23,40 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, onMounted } from 'vue'
+import { defineComponent, PropType, reactive, computed, onMounted } from 'vue'
 import { emitter } from './ValidateForm.vue'
 const pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-export interface RuleProp {
+export interface RuleProps {
   type: 'requried' | 'email';
   message: string;
   validator?: () => boolean;
 }
+type InputType = 'input' | 'textarea';
 export default defineComponent({
   name: 'ValidateInput',
   inheritAttrs: false,
   props: {
-    rules: Array as PropType<RuleProp[]>,
-    modelValue: String
+    rules: Array as PropType<RuleProps[]>,
+    modelValue: String,
+    type: {
+      type: String as PropType<InputType>,
+      default: 'input'
+    }
   },
   setup (props, context) {
     const inputRef = reactive({
-      val: props.modelValue || '',
+      val: computed({
+        get: () => props.modelValue || '',
+        set: val => {
+          context.emit('update:modelValue', val)
+        }
+      }),
       error: false,
       message: ''
     })
-    const updateValue = (e: KeyboardEvent) => {
-      const value = (e.target as HTMLInputElement).value
-      inputRef.val = value
-      context.emit('update:modelValue', value)
-    }
     const validateInput = () => {
       if (props.rules) {
-        const allPassed = props.rules.every((rule: RuleProp) => {
+        const allPassed = props.rules.every((rule: RuleProps) => {
           let passed = true
           inputRef.message = rule.message
           switch (rule.type) {
@@ -69,8 +82,7 @@ export default defineComponent({
     })
     return {
       inputRef,
-      validateInput,
-      updateValue
+      validateInput
     }
   }
 })

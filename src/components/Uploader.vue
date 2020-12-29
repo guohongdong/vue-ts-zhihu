@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div @click.prevent="toggleUpload" v-bind="$attrs">
+  <div class="file-upload">
+    <div class="file-upload-container" @click.prevent="toggleUpload" v-bind="$attrs">
       <slot v-if="fileStatus === 'loading'" name="loading">
         <span>上传中......</span>
       </slot>
@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import axios from 'axios'
-import { defineComponent, ref, PropType } from 'vue'
+import { defineComponent, ref, PropType, watch } from 'vue'
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error';
 type CheckFunction = (file: File) => boolean;
 export default defineComponent({
@@ -47,8 +47,13 @@ export default defineComponent({
   emits: ['file-upload', 'file-upload-error'],
   setup (props, context) {
     const fileInput = ref<HTMLInputElement | null>(null)
-    const fileStatus = ref<UploadStatus>('ready')
+    const fileStatus = ref<UploadStatus>(props.uploaded ? 'success' : 'ready')
     const uploadedData = ref(props.uploaded)
+    watch(() => props.uploaded, (newValue) => {
+      if (newValue) {
+        uploadedData.value = newValue
+      }
+    })
     const toggleUpload = () => {
       if (fileInput.value) {
         fileInput.value.click()
@@ -74,7 +79,6 @@ export default defineComponent({
           })
           .then(res => {
             fileStatus.value = 'success'
-            console.log(res)
             uploadedData.value = res.data
             context.emit('file-upload', res.data)
           })
