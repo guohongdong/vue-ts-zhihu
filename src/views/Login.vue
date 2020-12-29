@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-auto p-3 w-500">
     <ValidateForm @form-submit="handleFormSubmit">
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
@@ -15,6 +15,7 @@
         <ValidateInput
           placeholder="请输入密码"
           type="password"
+          autocomplete
           :rules="passwordRules"
           v-model="passwordVal"
         ></ValidateInput>
@@ -56,7 +57,6 @@ export default defineComponent({
     ]
     const store = useStore()
     const handleFormSubmit = (flag: boolean) => {
-      console.log(flag)
       if (flag) {
         store.dispatch('loginAndFetch')
         router.push('/')
@@ -73,4 +73,8 @@ export default defineComponent({
 })
 </script>
 
-<style></style>
+<style>
+.w-500{
+  max-width: 500px;
+}
+</style>

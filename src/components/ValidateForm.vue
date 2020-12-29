@@ -1,7 +1,7 @@
 <template>
   <form>
     <slot name="default"></slot>
-    <div class="mb-3" @click.prevent="handleFormSubmit">
+    <div class="submit-area d-grid" @click.prevent="handleFormSubmit">
       <slot name="submit">
         <button type="button" class="btn btn-primary">提交</button>
       </slot>

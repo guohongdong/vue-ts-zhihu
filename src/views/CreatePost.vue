@@ -30,14 +30,13 @@
           :rules="titleRules"
           v-model="titleVal"
           placeholder="请输入文章标题"
-          type="text"
         />
       </div>
       <div class="mb-3">
         <label class="form-label">文章详情：</label>
         <ValidateInput
           rows="10"
-          type="textarea"
+          tag="textarea"
           placeholder="请输入文章详情"
           :rules="contentRules"
           v-model="contentVal"

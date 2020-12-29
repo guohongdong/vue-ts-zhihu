@@ -1,7 +1,7 @@
 <template>
   <div class="validate-input-container pb-3">
     <textarea
-    v-if="type==='textarea'"
+    v-if="tag==='textarea'"
     class="form-control"
     :class="{
     'is-invalid': inputRef.error }"
@@ -27,7 +27,7 @@ import { defineComponent, PropType, reactive, computed, onMounted } from 'vue'
 import { emitter } from './ValidateForm.vue'
 const pattern = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 export interface RuleProps {
-  type: 'requried' | 'email';
+  type: 'requried' | 'email'|'confirm';
   message: string;
   validator?: () => boolean;
 }
@@ -38,7 +38,7 @@ export default defineComponent({
   props: {
     rules: Array as PropType<RuleProps[]>,
     modelValue: String,
-    type: {
+    tag: {
       type: String as PropType<InputType>,
       default: 'input'
     }
@@ -65,6 +65,9 @@ export default defineComponent({
               break
             case 'email':
               passed = pattern.test(inputRef.val)
+              break
+            case 'confirm':
+              passed = rule.validator ? rule.validator() : true
               break
 
             default:
